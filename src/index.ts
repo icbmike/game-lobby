@@ -1,11 +1,22 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { cyan } from "colors/safe";
+import { configureHandlers } from "./endpoints/lobbies";
+import { startJob } from "./lobbyExpirationJob";
 
 const app = express();
 
-app.get("/ping", (_: Request, res: Response) => {
+app.use(express.json());
+
+app.get("/ping", (req, res) => {
   res.status(200).send("Alive!");
 });
 
-console.log(cyan("Running on port 3001"));
-app.listen(3001);
+configureHandlers(app);
+
+// start expiration job
+startJob();
+
+// Start app
+const port = 3001;
+console.log(cyan(`Running on port ${port}`));
+app.listen(port);
