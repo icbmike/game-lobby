@@ -3,7 +3,6 @@ import { getLobbies, getLobby, newLobby } from "../lobbyStore";
 import { v4 } from "uuid";
 
 export const configureHandlers = (app: Express) => {
-
   app.get("/lobbies", (req, res) => {
     res.json(getLobbies());
   })
