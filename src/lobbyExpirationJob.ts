@@ -7,11 +7,11 @@ export const startJob = () => {
         console.log(cyan(`Running job: cleanup expired lobbies`))
         const now = dayjs();
 
-        const expiredLobbies  = getLobbies().filter(l => now.diff(dayjs(l.createdDate), 'minutes') > 2);
+        const expiredLobbies  = getLobbies().filter(l => now.diff(dayjs(l.createdDate), 'hours') >= 12);
 
         expiredLobbies.forEach(l => {
             console.log(yellow(`Removing expired lobby ${l.code}`))
             removeLobby(l.code);
         })
-    }, 30 * 1000);
+    }, 30 * 60 * 1000);
 };
