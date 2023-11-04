@@ -46,11 +46,14 @@ export const configureHandlers = (app: Express) => {
         .send(`Lobby is full. Lobby size: ${lobby.lobbySize}`);
     }
 
-    lobby.players.push({
+    const newPlayer = {
       name: newPlayerName,
       id: v4()
-    });
-    res.json(lobby);
+    }
+
+    lobby.players.push(newPlayer);
+
+    res.json({lobby, newPlayer});
   });
 
   app.delete("/lobbies/:code/players/:id", (req, res) => {
