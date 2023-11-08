@@ -1,6 +1,6 @@
 import express from "express";
 import { cyan } from "colors/safe";
-import { configureHandlers } from "./endpoints/lobbies";
+import { configureLobbyHandlers } from "./endpoints/lobbies";
 import { startJob } from "./lobbyExpirationJob";
 import morgan from 'morgan';
 
@@ -13,7 +13,7 @@ app.get("/ping", (req, res) => {
   res.status(200).send("Alive!");
 });
 
-configureHandlers(app);
+configureLobbyHandlers(app);
 
 // start expiration job
 startJob();

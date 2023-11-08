@@ -15,18 +15,19 @@ const newLobbyCode = () =>
     .join("");
 
 export const newLobby = (lobbySize?: number) => {
-    const newLobby: Lobby = {
-        code: newLobbyCode(),
-        players: [],
-        lobbySize: lobbySize,
-        createdDate: new Date()
-      };
+  const newLobby: Lobby = {
+    code: newLobbyCode(),
+    players: [],
+    lobbySize: lobbySize,
+    createdDate: new Date(),
+    isLocked: false
+  };
 
-      lobbies.push(newLobby);
-  
-      console.log(green(`New lobby: ${newLobby.code}`));
+  lobbies.push(newLobby);
 
-    return newLobby;
+  console.log(green(`New lobby: ${newLobby.code}`));
+
+  return newLobby;
 }
 
 export const removeLobby = (code: string) => {

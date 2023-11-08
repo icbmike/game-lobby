@@ -5,7 +5,8 @@ export interface Player {
 
 export interface Lobby {
     code: string;
-    players: Player[]
-    lobbySize?: number,
-    createdDate: Date
+    players: Player[];
+    lobbySize?: number;
+    createdDate: Date;
+    isLocked: boolean;
 }

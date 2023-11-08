@@ -2,7 +2,7 @@ import { Express } from "express";
 import { getLobbies, getLobby, newLobby } from "../lobbyStore";
 import { v4 } from "uuid";
 
-export const configureHandlers = (app: Express) => {
+export const configureLobbyHandlers = (app: Express) => {
   app.get("/lobbies", (req, res) => {
     res.json(getLobbies());
   })
@@ -46,6 +46,10 @@ export const configureHandlers = (app: Express) => {
         .send(`Lobby is full. Lobby size: ${lobby.lobbySize}`);
     }
 
+    if (lobby.isLocked) {
+      return res.status(400).send('Lobby is locked');
+    }
+
     const newPlayer = {
       name: newPlayerName,
       id: v4()
@@ -53,7 +57,7 @@ export const configureHandlers = (app: Express) => {
 
     lobby.players.push(newPlayer);
 
-    res.json({lobby, newPlayer});
+    res.json({ lobby, newPlayer });
   });
 
   app.delete("/lobbies/:code/players/:id", (req, res) => {
@@ -64,6 +68,17 @@ export const configureHandlers = (app: Express) => {
 
     lobby.players = lobby.players.filter(p => p.id !== req.params.id);
 
-    res.json(lobby);
+    return res.json(lobby);
+  });
+
+  app.post('/lobbies/:code/lock', (req, res) => {
+    const lobby = getLobby(req.params.code);
+    if (!lobby) {
+      return res.status(404).send("Lobby not found");
+    }
+
+    lobby.isLocked = true;
+
+    return res.json(lobby);
   });
 };
