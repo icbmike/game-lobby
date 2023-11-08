@@ -1,5 +1,2 @@
-import { createGameLobbyServer } from "./gameLobbyServer";
-
-const server = createGameLobbyServer({ port: 3001 });
-
-server.start();
+export { createGameLobbyServer } from "./gameLobbyServer";
+export { Player, Lobby } from "./models/Lobby";
