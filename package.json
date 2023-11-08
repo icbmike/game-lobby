@@ -5,7 +5,8 @@
   "author": "Mike Little",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "dist": "tsc --build --declaration"
   },
   "dependencies": {
     "colors": "^1.4.0",
