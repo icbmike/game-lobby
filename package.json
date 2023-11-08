@@ -1,6 +1,6 @@
 {
-  "name": "game-lobby-backend",
-  "version": "1.0.0",
+  "name": "@icbmike/game-lobby-backend",
+  "version": "0.0.5",
   "main": "src/index.ts",
   "author": "Mike Little",
   "license": "MIT",
