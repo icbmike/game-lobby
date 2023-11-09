@@ -25,5 +25,6 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
-  ]
+  ],
+  "packageManager": "yarn@4.0.1"
 }
