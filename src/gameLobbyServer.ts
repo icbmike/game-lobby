@@ -28,6 +28,7 @@ export const createGameLobbyServer = ({ port }: CreateGameLobbyServerOptions) =>
       // Start app
       console.log(cyan(`Running on port ${port}`));
       app.listen(port);
-    }
+    },
+    express: app
   }
 }
