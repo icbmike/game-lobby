@@ -1,4 +1,4 @@
-name: Node.js Package
+name: Publish NPM Package
 
 on:
   release:
@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 20.x
           
-      - run: yarn install --frozen-lockfile
+      - run: yarn install --immutable
       - run: yarn dist
 
   publish-npm:
@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: yarn install --frozen-lockfil
+      - run: yarn install --immutable
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_ACCESS_TOKEN}}
