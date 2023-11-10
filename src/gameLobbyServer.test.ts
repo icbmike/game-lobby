@@ -6,7 +6,7 @@ describe('gameLobbyServer', () => {
   let test: Test;
 
   beforeAll(() => {
-    const { express } = createGameLobbyServer({ port: 3001 })
+    const { express } = createGameLobbyServer({ port: 3000 })
     tester = request(express);
   });
 

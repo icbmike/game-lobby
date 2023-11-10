@@ -10,3 +10,11 @@ export interface Lobby {
     createdDate: Date;
     isLocked: boolean;
 }
+
+export interface LobbyAdditionalData {
+    lobbyCode: string;
+}
+
+export interface PlayerAdditionalData {
+    playerId: string;
+}

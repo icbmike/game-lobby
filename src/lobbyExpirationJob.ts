@@ -1,17 +1,22 @@
 import dayjs from "dayjs";
-import { getLobbies, removeLobby } from "./lobbyStore";
 import { cyan, yellow } from "colors/safe";
+import { BaseLobbyStore } from "./lobbyStore";
 
-export const startJob = () => {
+export interface ExpirationOptions {
+    maxAgeHours: number;
+    checkFrequencyMinutes: number;
+}
+
+export const startJob = ({ maxAgeHours, checkFrequencyMinutes }: ExpirationOptions, store: BaseLobbyStore) => {
     setInterval(() => {
         console.log(cyan(`Running job: cleanup expired lobbies`))
         const now = dayjs();
 
-        const expiredLobbies  = getLobbies().filter(l => now.diff(dayjs(l.createdDate), 'hours') >= 12);
+        const expiredLobbies = store.getLobbies().filter(l => now.diff(dayjs(l.createdDate), 'hours') >= maxAgeHours);
 
         expiredLobbies.forEach(l => {
             console.log(yellow(`Removing expired lobby ${l.code}`))
-            removeLobby(l.code);
+            store.removeLobby(l.code);
         })
-    }, 30 * 60 * 1000);
+    }, checkFrequencyMinutes * 60 * 1000);
 };

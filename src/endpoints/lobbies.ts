@@ -1,20 +1,20 @@
 import { Express } from "express";
-import { getLobbies, getLobby, newLobby } from "../lobbyStore";
+import { BaseLobbyStore } from "../lobbyStore";
 import { v4 } from "uuid";
 
-export const configureLobbyHandlers = (app: Express) => {
+export const configureLobbyHandlers = (app: Express, store: BaseLobbyStore) => {
   app.get("/lobbies", (req, res) => {
-    res.json(getLobbies());
+    res.json(store.getLobbies());
   })
 
   app.post("/lobbies", (req, res) => {
-    const lobby = newLobby(req.body.lobbySize);
+    const lobby = store.newLobby(req.body.lobbySize);
 
     res.json(lobby);
   });
 
   app.get("/lobbies/:code", (req, res) => {
-    const lobby = getLobby(req.params.code);
+    const lobby = store.getLobby(req.params.code);
     if (lobby) {
       res.json(lobby);
     } else {
@@ -23,7 +23,7 @@ export const configureLobbyHandlers = (app: Express) => {
   });
 
   app.post("/lobbies/:code/players", (req, res) => {
-    const lobby = getLobby(req.params.code);
+    const lobby = store.getLobby(req.params.code);
     if (!lobby) {
       return res.status(404).send("Lobby not found");
     }
@@ -61,7 +61,7 @@ export const configureLobbyHandlers = (app: Express) => {
   });
 
   app.delete("/lobbies/:code/players/:id", (req, res) => {
-    const lobby = getLobby(req.params.code);
+    const lobby = store.getLobby(req.params.code);
     if (!lobby) {
       return res.status(404).send("Lobby not found");
     }
@@ -72,7 +72,7 @@ export const configureLobbyHandlers = (app: Express) => {
   });
 
   app.post('/lobbies/:code/lock', (req, res) => {
-    const lobby = getLobby(req.params.code);
+    const lobby = store.getLobby(req.params.code);
     if (!lobby) {
       return res.status(404).send("Lobby not found");
     }

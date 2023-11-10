@@ -1,14 +1,27 @@
-import express from "express";
+import express, { Express } from "express";
 import { cyan } from "colors/safe";
-import { configureLobbyHandlers } from "./endpoints/lobbies";
-import { startJob } from "./lobbyExpirationJob";
+import { configureLobbyHandlers as configureBaseLobbyHandlers } from "./endpoints/lobbies";
+import { ExpirationOptions, startJob } from "./lobbyExpirationJob";
 import morgan from 'morgan';
+import { LobbyAdditionalData, PlayerAdditionalData } from "./models/Lobby";
+import { configureAdditionalDataHandlers } from "./endpoints/additionalData";
+import { createStore } from "./lobbyStore";
 
 export interface CreateGameLobbyServerOptions {
   port: number;
+  expirationOptions: ExpirationOptions
+  configureHandlers: (app: Express) => void;
 }
 
-export const createGameLobbyServer = ({ port }: CreateGameLobbyServerOptions) => {
+export const createGameLobbyServer = <TLobbyAdditionalData extends LobbyAdditionalData, TPlayerAdditionalData extends PlayerAdditionalData>({
+  port = 3000,
+  expirationOptions = {
+    maxAgeHours: 12,
+    checkFrequencyMinutes: 30
+  },
+  configureHandlers = () => { }
+}: Partial<CreateGameLobbyServerOptions>) => {
+  const store = createStore<TLobbyAdditionalData, TPlayerAdditionalData>();
   const app = express();
 
   app.use(express.json());
@@ -18,12 +31,14 @@ export const createGameLobbyServer = ({ port }: CreateGameLobbyServerOptions) =>
     res.status(200).send("Alive!");
   });
 
-  configureLobbyHandlers(app);
+  configureBaseLobbyHandlers(app, store);
+  configureAdditionalDataHandlers<TLobbyAdditionalData, TPlayerAdditionalData>(app, store);
+  configureHandlers(app);
 
   return {
     start: () => {
       // start expiration job
-      startJob();
+      startJob(expirationOptions, store);
 
       // Start app
       console.log(cyan(`Running on port ${port}`));
