@@ -13,6 +13,11 @@ export interface CreateGameLobbyServerOptions {
   configureHandlers: (app: Express) => void;
 }
 
+export interface CreateServerResult {
+  start: () => void;
+  express: Express
+}
+
 export const createGameLobbyServer = <TLobbyAdditionalData extends LobbyAdditionalData, TPlayerAdditionalData extends PlayerAdditionalData>({
   port = 3000,
   expirationOptions = {
@@ -20,7 +25,7 @@ export const createGameLobbyServer = <TLobbyAdditionalData extends LobbyAddition
     checkFrequencyMinutes: 30
   },
   configureHandlers = () => { }
-}: Partial<CreateGameLobbyServerOptions>) => {
+}: Partial<CreateGameLobbyServerOptions>): CreateServerResult => {
   const store = createStore<TLobbyAdditionalData, TPlayerAdditionalData>();
   const app = express();
 
